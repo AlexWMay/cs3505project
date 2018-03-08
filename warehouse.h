@@ -11,6 +11,7 @@
 #define WAREHOUSE_H
 
 #include<string>
+#include<map>
 
 namespace cs3505{
 
@@ -20,14 +21,17 @@ namespace cs3505{
 
 
   private:
+    std::string name;
+    long long request_quantity;
+    std::map<std::string, long long> request_map;
+
+
+
     warehouse(const std::string & name);  // Constructor
 
-    void receive(string upc, int quantity);
-    void request(string upc, int quantity);
+    void receive(std::string upc, long long q);
+    void request(std::string upc, long long q);
     void end_of_day();
-
-
-
   };
 }
 #endif
