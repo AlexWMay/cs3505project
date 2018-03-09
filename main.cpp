@@ -7,36 +7,57 @@
 #include <fstream>
 #include <sstream>
 
+
+void end_day_for_every_warehouse();
+
 int main()
 {
     std::ifstream file( "data1.txt" );
-    
-//    if ( file )
-//    {
-//        std::stringstream buffer;
-//
-//        buffer << file.rdbuf();
-//
-//        file.close();
-//
-//        buffer =
-//
-//        // operations on the buffer...
-//    }
-    
-    string line;
-    stringstream dosString;
-    ifstream inFile;
-    inFile.open (filename.c_str());
-    while(getline(inFile, line))
-    {
-        dosString<<line<<"\r\n";
-    }
-    return(dosString.str());
-    
-    std::cout << "Report by Jeremy Johnson and Alex May" << std::endl;
-    
+
+    std::string line;
+    while (std::getline(file, line))
+      {
+	std::istringstream iss(line);
+        
+	std::string indicator;
+	iss >> indicator;
+	if(indicator == "FoodItem")
+	  {
+	    
+	  }
+	else if(indicator == "Warehouse")
+	  {
+	    warenum++;
+	  }
+	else if(indicator == "Start")
+	  {
+	    startnum++;
+	  }
+	else if(indicator == "Receive:")
+	  {
+	    recnum++;
+	  }
+	else if(indicator == "Request:")
+	  {
+	    reqnum++;
+	  }
+	else if(indicator == "Next")
+	  {
+	    nexnum++;
+	  }
+	else if(indicator == "End")
+	  {
+	    endnum++;
+	  }
+	linenum++;
+      }
+
+    std::cout << << std::endl;
     
     return 0;
 }
 
+void end_day_for_every_warehouse()
+{
+
+}

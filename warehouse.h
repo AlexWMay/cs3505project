@@ -13,9 +13,11 @@
 #include<string>
 #include<map>
 
-namespace cs3505{
+namespace cs3505
+{
 
-  class warehouse{
+  class warehouse
+  {
 
     //ADD FRIEND CLASS HERE(WHEREVER MAIN IS SO IT CAN ACCESS VARIABLES)
 
@@ -25,9 +27,9 @@ namespace cs3505{
     long long request_quantity;
     std::map<std::string, long long> request_map;
 
+  public:
 
-
-    warehouse(const std::string & name);  // Constructor
+    warehouse(std::string name);  // Constructor
 
     void receive(std::string upc, long long q);
     void request(std::string upc, long long q);
