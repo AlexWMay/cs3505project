@@ -1,5 +1,4 @@
-FoodItem - UPC Code: 0353264991  Shelf life: 2  Name: chestnut puree with 
-vanilla
+FoodItem - UPC Code: 0353264991  Shelf life: 2  Name: chestnut puree with vanilla
 FoodItem - UPC Code: 0984523912  Shelf life: 1  Name: the orange box
 Warehouse - Columbus
 Warehouse - Scottsdale

@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include "warehouse.h"
+#include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
 
 namespace cs3505
 {
