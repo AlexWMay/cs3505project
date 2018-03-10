@@ -1,5 +1,5 @@
 // Authors: Alex May and Jeremy Johnson.
-// Project: Assigment 4. Transaction Report. CS3505.
+// Project: Assigment 4. Transaction Report. Spring 2018 CS_3505.
 //
 
 #include <stdio.h>
@@ -7,9 +7,11 @@
 #include <fstream>
 #include <sstream>
 #include "warehouse.h"
+#include "food_order.h"
 #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
 #include <boost/algorithm/string.hpp>
 #include <stdlib.h>
+#include <map>
 
 using namespace boost::gregorian;
 
@@ -20,6 +22,9 @@ int main()
     std::ifstream file( "data1.txt" );
     std::string warehouse;
     std::string warehousemark;
+    std::map<std::string, int> shelf_life_map;
+    std::map<std::string, std::string> food_name_map;
+    std::map<std::string, long long> popular_products;
 
     std::string line;
     while (std::getline(file, line))
@@ -45,6 +50,8 @@ int main()
 	    std::getline(iss, food_name);
 	    boost::trim(food_name);
 	   
+	    shelf_life_map[UPC] = shelf_life;
+	    food_name_map[UPC] = food_name;
 	    
 	    // std::cout << shelf_life << "\n";
 	    // std::cout << food_name << "\n";
@@ -53,7 +60,7 @@ int main()
 	  {
 	    iss >> warehousemark;
 	    iss >> warehouse;
-	    cs3505::warehouse test(warehouse);
+	    warehouse test(warehouse);
 	  }
 	else if(indicator == "Start")
 	  {
@@ -103,6 +110,7 @@ int main()
 	    char buffer[256];
 	    std::strcpy(buffer, str_quantity.c_str());
 	    long long quantity = std::atoll(buffer);
+	    popular_products[UPC] += 1;
 	    
 	  }
 	else if(indicator == "Next")
@@ -112,12 +120,48 @@ int main()
 	else if(indicator == "End")
 	  {
 	   
-	    return 0;
+	    // return 0;
 	  }
         
       }
 
+    //for (std::map<std::string, int>::iterator it = shelf_life_map.begin(); it != shelf_life_map.end(); ++it)
+    //   std::cout << it->first << " => " << it->second << '\n';
+
     std::cout << "end of main" << std::endl;
+
+    std::string UPC1 = "1";
+    std::string UPC2 = "1";
+    std::string UPC3 = "1";
+    long long first = 0;
+    long long second = 0;
+    long long third = 0;
+
+    for (std::map<std::string, long long>::iterator it = popular_products.begin(); it != popular_products.end(); ++it)
+      {
+	if(it->second );
+      }
+    
+    std::cout << "Most Popular Products:\n";
+
+    if(popular_products.size() > 2)
+      {
+	std::cout << first << " " << UPC1 << popular_products[UPC1]
+		  << second << " " << UPC2 << popular_products[UPC2]
+		  << third << " " << UPC2 << popular_products[UPC3] << std::endl;
+      }
+    if(popular_products.size() == 2)
+      {
+	std::cout << first << " " << UPC1 << popular_products[UPC1]
+		  << second << " " << UPC2 << popular_products[UPC2] << std::endl;
+      }
+    if(popular_products.size() == 1)
+      {
+	std::cout << first << " " << UPC1 << popular_products[UPC1] << std::endl;
+      }
+    
     
     return 0;
 }
+
+
