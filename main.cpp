@@ -20,7 +20,7 @@ void end_day_for_every_warehouse();
 int main()
 {
     std::ifstream file( "data1.txt" );
-    std::string warehouse;
+    std::string str_warehouse;
     std::string warehousemark;
     std::map<std::string, int> shelf_life_map;
     std::map<std::string, std::string> food_name_map;
@@ -59,8 +59,8 @@ int main()
 	else if(indicator == "Warehouse")
 	  {
 	    iss >> warehousemark;
-	    iss >> warehouse;
-	    warehouse test(warehouse);
+	    iss >> str_warehouse;
+	    warehouse test(str_warehouse);
 	  }
 	else if(indicator == "Start")
 	  {
