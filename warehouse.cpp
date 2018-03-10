@@ -6,11 +6,19 @@
  *   CS3505 - Spring 2018
  */
 
+// TODO: End of Day: Iterate through the requested_items map, and then
+// use a for loop to go through the test_inventory map to remove (use 
+// the .erase(1) function) the first item (if there are any dates 
+// in that food's exp dates). Once it has done that, if there are 
+// still items left, then build a string to return to the main() file
+// to put out as Underfilled Orders.
+
 #include <iostream>
 #include "warehouse.h"
 #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
 
-
+// THESE VARIABLES ARE ALL DECLARED IN THE .H FILE, SO THEY DON'T NEED TO BE
+// DECLARED AGAIN. TESTED TO MAKE SURE IT STILL WORKDS.
 // std::string name;
 // long long request_quantity;
 // std::map<std::string, long long> request_map;
@@ -36,12 +44,17 @@ warehouse::warehouse(std::string _name)
 warehouse::warehouse (const warehouse & other)
 {
   name = other.name;
+  current_day = other.current_day;
 }
 
 
-void warehouse::receive (std::string upc, long long q)
+void warehouse::receive (std::string upc, long long q, boost::gregorian::date exp_date)
 {
-  received_items[upc] += q;
+  for(long long i = 0; i < q; i++)
+    {
+      test_inventory[upc].push_back(exp_date);
+    }
+  
 }
 
 /*
@@ -62,7 +75,12 @@ void warehouse::request(std::string upc, long long q)
  */
 std::string  warehouse::end_of_day()
 {
+  
+
+
   // Set request qantity to zero after requests are filled.
+  date_duration dd(1);
+  current_day = current_day + dd;
   return "";
 }
 

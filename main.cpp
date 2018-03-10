@@ -28,6 +28,8 @@ int main()
     std::set<std::string> UPC_set;
     std::vector<std::string> warehouse_list;
     std::map<std::string, warehouse> warehouse_map; 
+    date d;
+    int days_passed = 0;
 
     std::cout << "Report by Jeremy Johnson and Alex May\n";
     std::cout << "Underfilled Orders:\n";
@@ -59,15 +61,14 @@ int main()
 	    UPC_set.insert(UPC);
 	    shelf_life_map[UPC] = shelf_life;
 	    food_name_map[UPC] = food_name;
-	    
-	    // std::cout << shelf_life << "\n";
-	    // std::cout << food_name << "\n";
 	  }
 	else if(indicator == "Warehouse")
 	  {
 	    std::string str_warehouse;
 	    iss >> warehousemark; // Ignore the "-" character
-	    iss >> str_warehouse;
+	    std::getline(iss, str_warehouse);
+	    boost::trim(str_warehouse);
+	    // iss >> str_warehouse;
 	    warehouse wh (str_warehouse);
 	    warehouse_list.push_back(str_warehouse);
 	    warehouse_map.insert(std::pair<std::string, warehouse>(str_warehouse, wh));
@@ -92,8 +93,8 @@ int main()
 	    gregdate += month;
 	    gregdate += day;
 	    // Build the date object.
-	    date d(from_undelimited_string(gregdate));
- 
+	    date temp_date(from_undelimited_string(gregdate));
+	    d = temp_date;
 	  }
 	else if(indicator == "Receive:")
 	  {
@@ -106,12 +107,13 @@ int main()
 	    char buffer[256];
 	    std::strcpy(buffer, str_quantity.c_str());
 	    long long quantity = std::atoll(buffer);
-	    
-	    
+	    int temp_shelf_life = shelf_life_map[UPC];
+	    date_duration dd(temp_shelf_life);
+	    date exp_date = d + dd;
 
-	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(UPC);
+	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(str_warehouse);
 	    if(it != warehouse_map.end())
-	      it->second.receive(UPC, quantity);
+	      it->second.receive(UPC, quantity, exp_date);
 
 	    // warehouse_map[str_warehouse].receive(UPC, quantity);
 	    // warehouse_map.find(str_warehouse).request(UPC, quantity);
@@ -130,7 +132,7 @@ int main()
 	    popular_products[UPC] += quantity;
 	    
 
-	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(UPC);
+	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(str_warehouse);
 	    if(it != warehouse_map.end())
 	      it->second.request(UPC, quantity);
 
@@ -143,6 +145,9 @@ int main()
 	    // Iterate through all of the warehouses and perform an end of day operation.
 	    for (std::map<std::string, warehouse>::iterator it = warehouse_map.begin(); it != warehouse_map.end(); ++it)
 	      std::cout << it->second.end_of_day();
+	    
+	    date_duration dd(1);
+	    d = d + dd;
 	  }
 	else if(indicator == "End")
 	  {
@@ -153,7 +158,7 @@ int main()
       }
 
     //for (std::map<std::string, warehouse>::iterator it = warehouse_map.begin(); it != warehouse_map.end(); ++it)
-    // std::cout << it->first << " => " << it->second.get_name() << '\n';
+    //std::cout << it->first << " => " << it->second.get_name() << '\n';
     
     
 
