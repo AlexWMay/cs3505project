@@ -14,14 +14,14 @@
 std::string name;
 long long request_quantity;
 std::map<std::string, long long> request_map;
-//std::map<std::set<food_order>> inventory;
+// std::map<std::string, std::set<food_order> > inventory;
+std::map<std::string, std::vector<food_order> > inventory;
+std::map<std::string, long long> received_items;
+std::map<std::string, long long> requested_items;
 
 warehouse::warehouse(std::string _name)
 {
   name = _name;
-  
-  
-
 
   //INSERT LOOP(or iteration) TO SET ALL OF THE AMOUNTS IN THE 
   //    REQUEST_MAP(using the item list) TO ZERO.
@@ -29,8 +29,7 @@ warehouse::warehouse(std::string _name)
 
 void warehouse::receive (std::string upc, long long q)
 {
-  
-  
+  received_items[upc] += q;
 }
 
 /*
@@ -40,8 +39,7 @@ void warehouse::receive (std::string upc, long long q)
  */
 void warehouse::request(std::string upc, long long q)
 {
-  long long temp = request_map.at(upc);
-  request_map.insert(std::pair<std::string, long long>(upc, temp));
+  requested_items[upc] += q;
 }
 
 /*

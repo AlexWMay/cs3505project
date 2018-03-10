@@ -10,10 +10,11 @@
 #ifndef WAREHOUSE_H
 #define WAREHOUSE_H
 
-#include<string>
+#include <string>
 #include "food_order.h"
-#include<map>
-
+#include <map>
+#include <set>
+#include <vector>
 
 class warehouse
 {
@@ -25,7 +26,9 @@ class warehouse
   std::string name;
   long long request_quantity;
   std::map<std::string, long long> request_map;
-  //std::map<std::set<food_order>> inventory;
+  std::map<std::string, std::vector<food_order> > inventory;
+  std::map<std::string, long long> received_items;
+  std::map<std::string, long long> requested_items;
   
  public:
   
