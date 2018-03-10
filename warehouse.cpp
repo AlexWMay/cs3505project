@@ -11,13 +11,18 @@
 #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
 
 
-std::string name;
-long long request_quantity;
-std::map<std::string, long long> request_map;
+// std::string name;
+// long long request_quantity;
+// std::map<std::string, long long> request_map;
 // std::map<std::string, std::set<food_order> > inventory;
-std::map<std::string, std::vector<food_order> > inventory;
-std::map<std::string, long long> received_items;
-std::map<std::string, long long> requested_items;
+// std::map<std::string, std::vector<food_order> > inventory;
+// std::map<std::string, long long> received_items;
+// std::map<std::string, long long> requested_items;
+
+void request(std::string upc, long long q);
+void receive(std::string upc, long long q);
+std::string end_of_day();
+std::string get_name();
 
 warehouse::warehouse(std::string _name)
 {
@@ -26,6 +31,13 @@ warehouse::warehouse(std::string _name)
   //INSERT LOOP(or iteration) TO SET ALL OF THE AMOUNTS IN THE 
   //    REQUEST_MAP(using the item list) TO ZERO.
 }
+
+// Copy constructor
+warehouse::warehouse (const warehouse & other)
+{
+  name = other.name;
+}
+
 
 void warehouse::receive (std::string upc, long long q)
 {
@@ -48,11 +60,13 @@ void warehouse::request(std::string upc, long long q)
  *    - Removes all food_orders set to expire the next day
  *
  */
-void warehouse::end_of_day()
+std::string  warehouse::end_of_day()
 {
-  
-  
-  
   // Set request qantity to zero after requests are filled.
-  
+  return "";
+}
+
+std::string warehouse::get_name()
+{
+  return name;
 }

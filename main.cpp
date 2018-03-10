@@ -17,12 +17,10 @@
 
 using namespace boost::gregorian;
 
-void end_day_for_every_warehouse();
-
 int main()
 {
     std::ifstream file( "data1.txt" );
-    std::string str_warehouse;
+    // std::string str_warehouse;
     std::string warehousemark;
     std::map<std::string, int> shelf_life_map;
     std::map<std::string, std::string> food_name_map;
@@ -67,11 +65,12 @@ int main()
 	  }
 	else if(indicator == "Warehouse")
 	  {
+	    std::string str_warehouse;
 	    iss >> warehousemark; // Ignore the "-" character
 	    iss >> str_warehouse;
 	    warehouse wh (str_warehouse);
 	    warehouse_list.push_back(str_warehouse);
-	    warehouse_map[str_warehouse] = wh;
+	    warehouse_map.insert(std::pair<std::string, warehouse>(str_warehouse, wh));
 	  }
 	else if(indicator == "Start")
 	  {
@@ -108,7 +107,14 @@ int main()
 	    std::strcpy(buffer, str_quantity.c_str());
 	    long long quantity = std::atoll(buffer);
 	    
-	    warehouse_map[str_warehouse].receive(UPC, quantity);
+	    
+
+	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(UPC);
+	    if(it != warehouse_map.end())
+	      it->second.receive(UPC, quantity);
+
+	    // warehouse_map[str_warehouse].receive(UPC, quantity);
+	    // warehouse_map.find(str_warehouse).request(UPC, quantity);
 	  }
 	else if(indicator == "Request:")
 	  {
@@ -123,11 +129,20 @@ int main()
 	    long long quantity = std::atoll(buffer);
 	    popular_products[UPC] += quantity;
 	    
-	     warehouse_map[str_warehouse].request(UPC, quantity);
+
+	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(UPC);
+	    if(it != warehouse_map.end())
+	      it->second.request(UPC, quantity);
+
+	    // warehouse_map[str_warehouse].request(UPC, quantity);
+	    // warehouse_map.find(str.request(UPC, quantity);	    
+
 	  }
 	else if(indicator == "Next")
 	  {
 	    // Iterate through all of the warehouses and perform an end of day operation.
+	    for (std::map<std::string, warehouse>::iterator it = warehouse_map.begin(); it != warehouse_map.end(); ++it)
+	      std::cout << it->second.end_of_day();
 	  }
 	else if(indicator == "End")
 	  {
@@ -137,8 +152,8 @@ int main()
         
       }
 
-    //for (std::map<std::string, int>::iterator it = shelf_life_map.begin(); it != shelf_life_map.end(); ++it)
-    //   std::cout << it->first << " => " << it->second << '\n';
+    //for (std::map<std::string, warehouse>::iterator it = warehouse_map.begin(); it != warehouse_map.end(); ++it)
+    // std::cout << it->first << " => " << it->second.get_name() << '\n';
     
     
 

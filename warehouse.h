@@ -32,11 +32,13 @@ class warehouse
   
  public:
   
-  warehouse(std::string name);  // Constructor
+  warehouse(std::string _name);  // Constructor
+  warehouse(const warehouse & other);
   
   void receive(std::string upc, long long q);
   void request(std::string upc, long long q);
-  void end_of_day();
+  std::string end_of_day();
+  std::string get_name();
 };
 #endif
 
