@@ -11,31 +11,30 @@
 #define WAREHOUSE_H
 
 #include<string>
+#include "food_order.h"
 #include<map>
 
-namespace cs3505
+
+class warehouse
 {
-
-  class warehouse
-  {
-
-    //ADD FRIEND CLASS HERE(WHEREVER MAIN IS SO IT CAN ACCESS VARIABLES)
-
-
-  private:
-    std::string name;
-    long long request_quantity;
-    std::map<std::string, long long> request_map;
-
-  public:
-
-    warehouse(std::string name);  // Constructor
-
-    void receive(std::string upc, long long q);
-    void request(std::string upc, long long q);
-    void end_of_day();
-  };
-}
+  
+  //ADD FRIEND CLASS HERE(WHEREVER MAIN IS SO IT CAN ACCESS VARIABLES)
+  
+  
+ private:
+  std::string name;
+  long long request_quantity;
+  std::map<std::string, long long> request_map;
+  //std::map<std::set<food_order>> inventory;
+  
+ public:
+  
+  warehouse(std::string name);  // Constructor
+  
+  void receive(std::string upc, long long q);
+  void request(std::string upc, long long q);
+  void end_of_day();
+};
 #endif
 
 

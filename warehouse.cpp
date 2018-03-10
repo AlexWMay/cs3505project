@@ -6,49 +6,55 @@
  *   CS3505 - Spring 2018
  */
 
-#include <string>
 #include <iostream>
 #include "warehouse.h"
 #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
 
-namespace cs3505
+
+std::string name;
+long long request_quantity;
+std::map<std::string, long long> request_map;
+//std::map<std::set<food_order>> inventory;
+
+warehouse::warehouse(std::string _name)
 {
-
-  std::string name;
-
-  cs3505::warehouse::warehouse(std::string _name)
-  {
-    name = _name;
-    
-
-    //INSERT LOOP(or iteration) TO SET ALL OF THE AMOUNTS IN THE 
-    //    REQUEST_MAP(using the item list) TO ZERO.
-  };
-
-  void cs3505::warehouse::receive (std::string upc, long long q)
-  {
+  name = _name;
+  
+  
 
 
-  }
+  //INSERT LOOP(or iteration) TO SET ALL OF THE AMOUNTS IN THE 
+  //    REQUEST_MAP(using the item list) TO ZERO.
+}
 
-  /*
-   * Takes a requested value and adds the quantity to whatever quantity
-   *     has already been requested for that day and stores it back into
-   *     the request_map.
-   */
-  void cs3505::warehouse::request(std::string upc, long long q)
-  {
-    long long temp = request_map.at(upc);
-    request_map.insert(std::pair<std::string, long long>(upc, temp));
-  }
+void warehouse::receive (std::string upc, long long q)
+{
+  
+  
+}
 
-  void cs3505::warehouse::end_of_day()
-  {
+/*
+ * Takes a requested value and adds the quantity to whatever quantity
+ *     has already been requested for that day and stores it back into
+ *     the request_map.
+ */
+void warehouse::request(std::string upc, long long q)
+{
+  long long temp = request_map.at(upc);
+  request_map.insert(std::pair<std::string, long long>(upc, temp));
+}
 
-
-
-    // Set request qantity to zero after requests are filled.
-
-  }
-
+/*
+ * Performs end of day tasks as follows:
+ *    - Attempts to fulfill all requests.
+ *    - Removes all food_orders set to expire the next day
+ *
+ */
+void warehouse::end_of_day()
+{
+  
+  
+  
+  // Set request qantity to zero after requests are filled.
+  
 }
