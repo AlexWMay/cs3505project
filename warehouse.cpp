@@ -73,9 +73,50 @@ void warehouse::request(std::string upc, long long q)
  *    - Removes all food_orders set to expire the next day
  *
  */
-std::string  warehouse::end_of_day()
+std::string  warehouse::end_of_day(boost::gregorian::date dy)
 {
-  
+  // Fulfill requests
+  long long req_quantity;
+  std::string upc;
+  std::string day = warehouse::dateAsMMDDYYYY(dy);
+  // For each food item requested that day...
+  for(std::map<std::string, long long>::iterator it = requested_items.begin(); it != requested_items.end(); ++it)
+    {
+      req_quantity = it->second;
+      upc = it->first;
+      // Subtract one item from the warehouse for every requested item
+      for(;req_quantity > 0; req_quantity--)
+	{
+	  if(test_inventory[upc].empty())
+	    {
+	      std::cout << day << " " << upc << " " << "NAME HERE\n";
+       
+	      // Set the requested quantity and the quantity in the requested_items
+	      //     map  to zero
+	      req_quantity = 0;
+	      it->second = 0;
+	    }
+	  else
+	    {
+	    test_inventory[upc].erase(test_inventory[upc].begin());
+	    std::cout << "erase\n";
+	    }
+	}
+    }
+
+
+  // Remove any expired food.
+  for(std::map<std::string, std::vector<boost::gregorian::date > >::iterator it = test_inventory.begin(); it != test_inventory.end(); ++it)
+    {
+
+      while(it->second.front() == dy)
+	{
+	  it->second.erase(it->second.begin());
+	  std::cout << "EXP\n";
+	}
+
+    }
+
 
 
   // Set request qantity to zero after requests are filled.
@@ -87,4 +128,21 @@ std::string  warehouse::end_of_day()
 std::string warehouse::get_name()
 {
   return name;
+}
+
+
+// HELPER FUNCTION TO CONVERT DATE
+
+
+/*
+ * Following 9 lines of code obtained from: https://stackoverflow.com/questions/7162457/how-to-convert-boostgregoriandate-to-mm-dd-yyyy-format-and-vice-versa
+ */
+const std::locale fmt(std::locale::classic(),
+                      new boost::gregorian::date_facet("%m/%d/%Y"));
+std::string warehouse::dateAsMMDDYYYY( const boost::gregorian::date& date )
+{
+    std::ostringstream os;
+    os.imbue(fmt);
+    os << date;
+    return os.str();
 }

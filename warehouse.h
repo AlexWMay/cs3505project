@@ -21,9 +21,6 @@
 class warehouse
 {
   
-  //ADD FRIEND CLASS HERE(WHEREVER MAIN IS SO IT CAN ACCESS VARIABLES)
-  
-  
  private:
   std::string name;
   long long request_quantity;
@@ -34,6 +31,9 @@ class warehouse
 std::map<std::string, std::vector<boost::gregorian::date> > test_inventory;
 boost::gregorian::date current_day;
   
+ std::string dateAsMMDDYYYY( const boost::gregorian::date& date);
+
+
  public:
   
   warehouse(std::string _name);  // Constructor
@@ -41,7 +41,7 @@ boost::gregorian::date current_day;
 
 void receive(std::string upc, long long q, boost::gregorian::date exp_date);
   void request(std::string upc, long long q);
-  std::string end_of_day();
+  std::string end_of_day(boost::gregorian::date d);
   std::string get_name();
 };
 #endif

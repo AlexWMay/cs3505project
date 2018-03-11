@@ -144,7 +144,7 @@ int main()
 	  {
 	    // Iterate through all of the warehouses and perform an end of day operation.
 	    for (std::map<std::string, warehouse>::iterator it = warehouse_map.begin(); it != warehouse_map.end(); ++it)
-	      std::cout << it->second.end_of_day();
+	      std::cout << it->second.end_of_day(d);
 	    
 	    date_duration dd(1);
 	    d = d + dd;
