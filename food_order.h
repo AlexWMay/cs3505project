@@ -19,18 +19,18 @@ class food_order
 {
 
  private:
-  long long quantity;
   date exp_date;
+  std::string name;
 
  public:
 
-  food_order(long long q, date exp);  // Constructor
+  food_order(date exp, std::string _name);  // Constructor
 
   ~food_order();  // Destructor
 
   date get_expiration();
-  long long get_quantity();
   void subtract(long long num);
+  std::string get_name();
 };
 
 

@@ -14,8 +14,12 @@
 #include <map>
 #include <set>
 #include <vector>
+#include "underfilled.h"
+#include "food_list.h"
 
 using namespace boost::gregorian;
+
+std::string dateAsMMDDYYYY(const boost::gregorian::date& date);
 
 int main()
 {
@@ -30,6 +34,8 @@ int main()
     std::map<std::string, warehouse> warehouse_map; 
     date d;
     int days_passed = 0;
+    food_list list;
+    underfilled report;
 
     std::cout << "Report by Jeremy Johnson and Alex May\n";
     std::cout << "Underfilled Orders:\n";
@@ -58,6 +64,8 @@ int main()
 	    std::getline(iss, food_name);
 	    boost::trim(food_name);
 	   
+	    list.add(UPC, food_name);
+
 	    UPC_set.insert(UPC);
 	    shelf_life_map[UPC] = shelf_life;
 	    food_name_map[UPC] = food_name;
@@ -101,6 +109,7 @@ int main()
 	    std::string UPC;
 	    std::string str_quantity;
 	    std::string str_warehouse;
+	    std::string food_name;
 	    iss >> UPC;
 	    iss >> str_quantity;
 	    iss >> str_warehouse;
@@ -110,6 +119,8 @@ int main()
 	    int temp_shelf_life = shelf_life_map[UPC];
 	    date_duration dd(temp_shelf_life);
 	    date exp_date = d + dd;
+	    // food_name = food_name_map[UPC];
+	    
 
 	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(str_warehouse);
 	    if(it != warehouse_map.end())
@@ -123,6 +134,7 @@ int main()
 	    std::string UPC;
 	    std::string str_quantity;
 	    std::string str_warehouse;
+	    std::string food_name;
 	    iss >> UPC;
 	    iss >> str_quantity;
 	    iss >> str_warehouse;
@@ -130,11 +142,11 @@ int main()
 	    std::strcpy(buffer, str_quantity.c_str());
 	    long long quantity = std::atoll(buffer);
 	    popular_products[UPC] += quantity;
-	    
-
+	    food_name = food_name_map[UPC];
+	    // std::cout << "Food: " << food_name << " Req Amount: " << quantity << "\n";
 	    std::map<std::string, warehouse>::iterator it = warehouse_map.find(str_warehouse);
 	    if(it != warehouse_map.end())
-	      it->second.request(UPC, quantity);
+	      it->second.request(UPC, quantity, food_name);
 
 	    // warehouse_map[str_warehouse].request(UPC, quantity);
 	    // warehouse_map.find(str.request(UPC, quantity);	    
@@ -143,15 +155,31 @@ int main()
 	else if(indicator == "Next")
 	  {
 	    // Iterate through all of the warehouses and perform an end of day operation.
+	    std::cout << "Day: " << d << "\n";
 	    for (std::map<std::string, warehouse>::iterator it = warehouse_map.begin(); it != warehouse_map.end(); ++it)
-	      std::cout << it->second.end_of_day(d);
+	      {
+		// std::cout << "warehouse: " << it->first << '\n';
+		it->second.end_of_day(d, list);
+	      }
+
+	    std::string day = dateAsMMDDYYYY(d);
+	    report.print_underfilled(day, list);
 	    
 	    date_duration dd(1);
 	    d = d + dd;
 	  }
 	else if(indicator == "End")
 	  {
-	   
+	    // std::cout << "Day: " << d << "\n";
+	    for (std::map<std::string, warehouse>::iterator it = warehouse_map.begin(); it != warehouse_map.end(); ++it)
+	      {
+		// std::cout << "warehouse: " << it->first << '\n';
+		it->second.end_of_day(d, list);
+	      }
+	      
+	    
+	    date_duration dd(1);
+	    d = d + dd;
 	    // return 0;
 	  }
         
@@ -218,4 +246,17 @@ int main()
     return 0;
 }
 
+
+/*
+ * Following 9 lines of code obtained from: https://stackoverflow.com/questions/7162457/how-to-convert-boostgregoriandate-to-mm-dd-yyyy-format-and-vice-versa
+ */
+const std::locale fmt(std::locale::classic(),
+                      new boost::gregorian::date_facet("%m/%d/%Y"));
+std::string dateAsMMDDYYYY( const boost::gregorian::date& date )
+{
+    std::ostringstream os;
+    os.imbue(fmt);
+    os << date;
+    return os.str();
+}
 

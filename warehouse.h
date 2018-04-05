@@ -17,6 +17,7 @@
 #include <vector>
 #include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
 #include <boost/algorithm/string.hpp>
+#include "food_list.h"
 
 class warehouse
 {
@@ -28,8 +29,9 @@ class warehouse
   std::map<std::string, std::vector<food_order> > inventory;
   std::map<std::string, long long> received_items;
   std::map<std::string, long long> requested_items;
-std::map<std::string, std::vector<boost::gregorian::date> > test_inventory;
-boost::gregorian::date current_day;
+  std::map<std::string, std::vector<boost::gregorian::date> > test_inventory;
+  boost::gregorian::date current_day;
+  std::map<std::string, std::string> food_name_map;
   
  std::string dateAsMMDDYYYY( const boost::gregorian::date& date);
 
@@ -39,9 +41,9 @@ boost::gregorian::date current_day;
   warehouse(std::string _name);  // Constructor
   warehouse(const warehouse & other);
 
-void receive(std::string upc, long long q, boost::gregorian::date exp_date);
-  void request(std::string upc, long long q);
-  std::string end_of_day(boost::gregorian::date d);
+  void receive(std::string upc, long long q, boost::gregorian::date exp_date);
+  void request(std::string upc, long long q, std::string food_name);
+  void end_of_day(boost::gregorian::date d, food_list & list);
   std::string get_name();
 };
 #endif

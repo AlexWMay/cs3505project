@@ -32,6 +32,7 @@ void receive(std::string upc, long long q);
 std::string end_of_day();
 std::string get_name();
 
+
 warehouse::warehouse(std::string _name)
 {
   name = _name;
@@ -52,6 +53,9 @@ void warehouse::receive (std::string upc, long long q, boost::gregorian::date ex
 {
   for(long long i = 0; i < q; i++)
     {
+      /*food_order fo(exp_date, food_name);
+      food_name_map[upc] = food_name;
+      inventory[upc].push_back(fo);*/
       test_inventory[upc].push_back(exp_date);
     }
   
@@ -62,9 +66,13 @@ void warehouse::receive (std::string upc, long long q, boost::gregorian::date ex
  *     has already been requested for that day and stores it back into
  *     the request_map.
  */
-void warehouse::request(std::string upc, long long q)
+void warehouse::request(std::string upc, long long q, std::string food_name)
 {
+  food_name_map[upc] = food_name;
+  // long long temp = requested_items[upc];
+  // temp += q;
   requested_items[upc] += q;
+  // std::cout << "Reqested amount after adding: "  << requested_items[upc] << "\n";
 }
 
 /*
@@ -73,48 +81,58 @@ void warehouse::request(std::string upc, long long q)
  *    - Removes all food_orders set to expire the next day
  *
  */
-std::string  warehouse::end_of_day(boost::gregorian::date dy)
+void warehouse::end_of_day(boost::gregorian::date dy, food_list & list)
 {
   // Fulfill requests
+  // std::cout << "Warehouse: " << get_name() << "\n";
   long long req_quantity;
+  std::string underfilled;
   std::string upc;
   std::string day = warehouse::dateAsMMDDYYYY(dy);
+
   // For each food item requested that day...
   for(std::map<std::string, long long>::iterator it = requested_items.begin(); it != requested_items.end(); ++it)
     {
+      bool empty = false;
       req_quantity = it->second;
+      
       upc = it->first;
+      // std::cout << "Requested Item: " << upc << " Quantity: " << req_quantity << " Current inventory: " << inventory[upc].size() << " \n";
       // Subtract one item from the warehouse for every requested item
-      for(;req_quantity > 0; req_quantity--)
+      while(!empty && req_quantity > 0)
 	{
+	  
+	  //if(inventory[upc].empty())
 	  if(test_inventory[upc].empty())
 	    {
-	      std::cout << day << " " << upc << " " << "NAME HERE\n";
-       
+	      std::cout << day << " " << upc << " " << food_name_map[upc] << '\n'; // "NAME HERE\n";
+	      empty = true;
 	      // Set the requested quantity and the quantity in the requested_items
 	      //     map  to zero
 	      req_quantity = 0;
 	      it->second = 0;
 	    }
-	  else
+	  else if(!empty)
 	    {
-	    test_inventory[upc].erase(test_inventory[upc].begin());
-	    std::cout << "erase\n";
+	      req_quantity--;
+	      // inventory[upc].erase(inventory[upc].begin());
+	      test_inventory[upc].erase(test_inventory[upc].begin());
+	      it->second--; // = req_quantity-1;
+	    // std::cout << "erase\n";
 	    }
 	}
     }
 
+  requested_items.clear();
 
   // Remove any expired food.
-  for(std::map<std::string, std::vector<boost::gregorian::date > >::iterator it = test_inventory.begin(); it != test_inventory.end(); ++it)
+  for(std::map<std::string, std::vector<food_order > >::iterator it = inventory.begin(); it != inventory.end(); ++it)
     {
-
-      while(it->second.front() == dy)
+      while(!it->second.empty() && it->second.front().get_expiration() == dy)
 	{
 	  it->second.erase(it->second.begin());
-	  std::cout << "EXP\n";
+	  // std::cout << "EXP\n";
 	}
-
     }
 
 
@@ -122,7 +140,7 @@ std::string  warehouse::end_of_day(boost::gregorian::date dy)
   // Set request qantity to zero after requests are filled.
   date_duration dd(1);
   current_day = current_day + dd;
-  return "";
+  // return "";
 }
 
 std::string warehouse::get_name()

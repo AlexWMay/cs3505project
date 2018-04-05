@@ -8,43 +8,29 @@
 
 
 #include "food_order.h"
+#include "boost/date_time/gregorian/gregorian.hpp" //include all types plus i/o
 
-long long quantity;
-date exp_date;
-
-
-food_order::food_order(long long q, date exp){
-
-  quantity = q;
+food_order::food_order(date exp, std::string _name)
+{
   exp_date = exp;
+  name = _name;
 }
 
-food_order::~food_order(){
+food_order::~food_order()
+{
 
 }
 
 /*
  * Returns the expiration date for the food_order.
  */
-date food_order::get_expiration(){
-
+date food_order::get_expiration()
+{
   return exp_date;
 }
 
-/*
- * Returns the quantity value for the food_order.
- */
-long long food_order::get_quantity(){
-
-  return quantity;
-}
-
-/*
- * Subtracts the input number from quantity and makes the answer
- *    the new quantity.
- */
-void food_order::subtract(long long num){
-
-  quantity = (quantity - num);
+std::string food_order::get_name()
+{
+  return name;
 }
 
